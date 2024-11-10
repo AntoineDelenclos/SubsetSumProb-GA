@@ -1,2 +1,0 @@
-Astar = [ 52 86 90 ]
-sum(Astar) = 228

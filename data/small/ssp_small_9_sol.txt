@@ -1,2 +1,0 @@
-Astar = [ 28 38 75 ]
-sum(Astar) = 141
