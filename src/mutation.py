@@ -1,7 +1,6 @@
 import random
 from src.fitnessFunction import calculate_fitness
 
-
 def mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop, A, Sa, penalty):
     populationMutationNumber = int(percentPopMutated * popNumber)  #A % of our population will be mutated
     countMutations = 0
@@ -16,7 +15,10 @@ def mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated
 
         for geneIndex in specificTransformedGenes:
             chromosome[geneIndex] = (chromosome[geneIndex] + 1) % 2  # Flip the gene value between 0 and 1
-        newChromosomePop[positionPop] = chromosome
+
+        if calculate_fitness(chromosome, A, Sa, penalty) < calculate_fitness(newChromosomePop[positionPop], A, Sa, penalty): #We only keep the mutation if it improves the fitness
+            newChromosomePop[positionPop] = chromosome
+
         countMutations += 1
     #we mutate the best population together
     for positionPop in bestPop:
