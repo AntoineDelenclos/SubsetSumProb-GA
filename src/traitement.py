@@ -8,7 +8,7 @@ def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGen
     fitnessValue = evaluate(chromosomePop, A, Sa)
     bestPop = positionBest(fitnessValue, bestPopLength)
     # Mutations
-    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop)
+    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop, A, Sa)
     # Croisement
     chromosomePopCrossing = crossing(popNumber, chromosomePopMut, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop)
 
