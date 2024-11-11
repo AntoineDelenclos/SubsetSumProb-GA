@@ -6,11 +6,12 @@ from src.mutation import mutation
 def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength):
     #Evaluation
     fitnessValue = evaluate(chromosomePop, A, Sa)
-    # Mutations
-    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated)
-    # Croisement
     bestPop = positionBest(fitnessValue, bestPopLength)
+    # Mutations
+    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop)
+    # Croisement
     chromosomePopCrossing = crossing(popNumber, chromosomePopMut, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop)
+
     chromosomePopFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop)
     return chromosomePopFinal, fitnessValue
 
