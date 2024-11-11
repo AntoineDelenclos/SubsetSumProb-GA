@@ -2,7 +2,7 @@ import random
 from heapq import nsmallest
 from src.fitnessFunction import calculate_fitness
 
-def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop):
+def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop, penalty):
     newChromosomePop = list(chromosomePop)
     populationCroisementNumber = int(percentPopulationCrossing * POPULATION_NUMBER)  # Croisement sur un pourcentage de la population
     countCroisements = 0
@@ -47,9 +47,9 @@ def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing,
                 flip = True
 
         fitnessChromosomes = [
-            (calculate_fitness(chromosomeUn, A, Sa), chromosomeUn),
-            (calculate_fitness(chromosomeDeux, A, Sa), chromosomeDeux),
-            (calculate_fitness(chromosomeTrois, A, Sa), chromosomeTrois)
+            (calculate_fitness(chromosomeUn, A, Sa, penalty), chromosomeUn),
+            (calculate_fitness(chromosomeDeux, A, Sa, penalty), chromosomeDeux),
+            (calculate_fitness(chromosomeTrois, A, Sa, penalty), chromosomeTrois)
         ]
         bestChromosomes = nsmallest(2, fitnessChromosomes, key=lambda x: x[0])
 

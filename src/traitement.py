@@ -5,38 +5,38 @@ from src.mutation import mutation
 
 
 #This return the final chromosome population after the first treatment and the fitness values associated, and also the set and the targeted value
-def firstTreatment(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength):
+def firstTreatment(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty):
     # Generation de la premiere population
     chromosomePop, A, Sa = ChromosomePopulationGeneration(pathFile, popNumber)
 
     # Mutations
-    fitnessValue = evaluate(chromosomePop, A, Sa)
+    fitnessValue = evaluate(chromosomePop, A, Sa, penalty)
     bestPop = positionBest(fitnessValue, bestPopLength)
     chromosomePopMutation = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated,
-                                     highPercentGenesMutated, bestPop, A, Sa)
+                                     highPercentGenesMutated, bestPop, A, Sa, penalty)
 
     # Croisement
-    fitnessValue = evaluate(chromosomePopMutation, A, Sa)
+    fitnessValue = evaluate(chromosomePopMutation, A, Sa, penalty)
     bestPop = positionBest(fitnessValue, bestPopLength)
     chromosomePopCrossing = crossing(popNumber, chromosomePopMutation, A, Sa, percentPopCrossing,
-                                     lowPercentCutNumber, highPercentCutNumber, bestPop)
+                                     lowPercentCutNumber, highPercentCutNumber, bestPop, penalty)
 
-    chromosomeFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop)
-    fitnessValue = evaluate(chromosomePopCrossing, A, Sa)
+    chromosomeFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop, penalty)
+    fitnessValue = evaluate(chromosomePopCrossing, A, Sa, penalty)
 
     return chromosomeFinal, fitnessValue, A, Sa
 
 #Permet d'effectuer l'algorithme génétique avec les opérations à effectuer dans l'ordre
-def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength):
+def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty):
     #Evaluation
-    fitnessValue = evaluate(chromosomePop, A, Sa)
+    fitnessValue = evaluate(chromosomePop, A, Sa, penalty)
     bestPop = positionBest(fitnessValue, bestPopLength)
     # Mutations
-    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop, A, Sa)
+    chromosomePopMut = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, bestPop, A, Sa, penalty)
     # Croisement
-    chromosomePopCrossing = crossing(popNumber, chromosomePopMut, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop)
+    chromosomePopCrossing = crossing(popNumber, chromosomePopMut, A, Sa, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPop, penalty)
 
-    chromosomePopFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop)
+    chromosomePopFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop, penalty)
     return chromosomePopFinal, fitnessValue
 
 #Permet d'afficher la liste des solutions trouvées
