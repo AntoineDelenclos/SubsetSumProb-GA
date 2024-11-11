@@ -8,10 +8,10 @@ def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing,
     countCroisements = 0
     while countCroisements < populationCroisementNumber:
         positionPopUn = random.randint(0, POPULATION_NUMBER - 1)   #on sélectionne un chromosome au hasard, l'autre aura 1 chance sur 2 d'être un meilleur chromosome
-        positionPopDeux = random.randint(0, POPULATION_NUMBER - 1)
         while positionPopUn in bestPop:
             positionPopUn = random.randint(0,POPULATION_NUMBER - 1)
-        bestChromosomeOrNot = random.randint(1,2)
+        bestChromosomeOrNot = random.randint(1,3)
+        isBestChromosome = (bestChromosomeOrNot != 2)
         if bestChromosomeOrNot == 2:
             positionPopDeux = random.randint(0, POPULATION_NUMBER - 1)
             while positionPopDeux in bestPop:
@@ -51,10 +51,14 @@ def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing,
             (calculate_fitness(chromosomeDeux, A, Sa), chromosomeDeux),
             (calculate_fitness(chromosomeTrois, A, Sa), chromosomeTrois)
         ]
-
         bestChromosomes = nsmallest(2, fitnessChromosomes, key=lambda x: x[0])
 
-        newChromosomePop[positionPopUn] = bestChromosomes[0][1]
-        newChromosomePop[positionPopDeux] = bestChromosomes[1][1]
+        if isBestChromosome and bestChromosomes[0][1] is chromosomeDeux:
+            # Remettre chromosomeDeux dans sa position initiale si c'était le meilleur des trois
+            newChromosomePop[positionPopDeux] = chromosomeDeux
+        else:
+            newChromosomePop[positionPopUn] = bestChromosomes[0][1]
+            newChromosomePop[positionPopDeux] = bestChromosomes[1][1]
+
         countCroisements += 1
     return newChromosomePop
