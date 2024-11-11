@@ -20,19 +20,20 @@ def evaluate(chromosomePop, A, Sa):
 
 #This will allow to select a number of our best chromosomes from the population that we want to keep
 def positionBest(fitnessValue, bestPopLength):
-    #sortedFitness = dict(sorted(fitnessValue.items(), key=lambda item: item[1]))
-    sortedFitness = [i for i, j in sorted(fitnessValue.items(), key=lambda item: item[1])]
-    #print(sortedFitness)
-    bestIndexes = []
-    for i in range(bestPopLength):
-        bestIndexes.append(sortedFitness[i])
-        #bestIndexes.append(sortedFitness[i][0])
-    #print(bestIndexes)
+    # Trier les chromosomes par fitness croissante (meilleure fitness en premier)
+    sortedFitness = [i for i, _ in sorted(fitnessValue.items(), key=lambda item: item[1])]
+    bestIndexes = sortedFitness[:bestPopLength]
     print(f"BEST : {fitnessValue[bestIndexes[0]]}")
     return bestIndexes
 
+
 def betterOrNot(chromosomePopBeforeCrossing, chromosomePopAfterCrossing, A, Sa, bestPop):
-    for i in range(len(bestPop)):
-        if calculate_fitness(chromosomePopBeforeCrossing[bestPop[i]], A, Sa) < calculate_fitness(chromosomePopAfterCrossing[bestPop[i]], A, Sa):
-            chromosomePopAfterCrossing[bestPop[i]] = chromosomePopBeforeCrossing[bestPop[i]]
+    # Parcourir chaque index des meilleurs chromosomes
+    for idx in bestPop:
+        fitness_before = calculate_fitness(chromosomePopBeforeCrossing[idx], A, Sa)
+        fitness_after = calculate_fitness(chromosomePopAfterCrossing[idx], A, Sa)
+
+        # Remplacement si le score de fitness s'améliore ou reste constant
+        if fitness_before <= fitness_after:
+            chromosomePopAfterCrossing[idx] = chromosomePopBeforeCrossing[idx]
     return chromosomePopAfterCrossing
