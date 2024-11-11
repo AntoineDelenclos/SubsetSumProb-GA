@@ -12,12 +12,12 @@ def main():
     # Training Settings
     POPULATION_NUMBER = 30000
     PERCENT_POP_MUTATED = 0.4
-    LOW_PERCENT_GENES_MUTATED = 0.1
-    HIGH_PERCENT_GENES_MUTATED = 0.3
+    LOW_PERCENT_GENES_MUTATED = 0.05
+    HIGH_PERCENT_GENES_MUTATED = 0.2
     PERCENT_POP_CROSSING = 0.8
     LOW_PERCENT_CUT_NUMBER = 0.02
     HIGH_PERCENT_CUT_NUMBER = 0.8
-    BEST_POP_LENGTH = 10
+    BEST_POP_LENGTH = 100
 
     # Generation de la premiere population
     chromosomePop, A, Sa = ChromosomePopulationGeneration(path, POPULATION_NUMBER)
@@ -26,7 +26,7 @@ def main():
     # Mutations
     fitnessValue = evaluate(chromosomePop, A, Sa)
     bestPop = positionBest(fitnessValue, BEST_POP_LENGTH)
-    chromosomePopMutation = mutation(chromosomePop, POPULATION_NUMBER, PERCENT_POP_MUTATED, LOW_PERCENT_GENES_MUTATED, HIGH_PERCENT_GENES_MUTATED, bestPop)
+    chromosomePopMutation = mutation(chromosomePop, POPULATION_NUMBER, PERCENT_POP_MUTATED, LOW_PERCENT_GENES_MUTATED, HIGH_PERCENT_GENES_MUTATED, bestPop, A, Sa)
 
     # Croisement
     fitnessValue = evaluate(chromosomePopMutation, A, Sa)
