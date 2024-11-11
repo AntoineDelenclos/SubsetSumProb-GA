@@ -1,5 +1,4 @@
 import random
-
 from src.fitnessFunction import calculate_fitness
 
 

@@ -1,6 +1,30 @@
+from src.ChromosomePopulationGenerator import ChromosomePopulationGeneration
 from src.crossing import crossing
 from src.fitnessFunction import evaluate, positionBest, betterOrNot
 from src.mutation import mutation
+
+
+#This return the final chromosome population after the first treatment and the fitness values associated, and also the set and the targeted value
+def firstTreatment(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength):
+    # Generation de la premiere population
+    chromosomePop, A, Sa = ChromosomePopulationGeneration(pathFile, popNumber)
+
+    # Mutations
+    fitnessValue = evaluate(chromosomePop, A, Sa)
+    bestPop = positionBest(fitnessValue, bestPopLength)
+    chromosomePopMutation = mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated,
+                                     highPercentGenesMutated, bestPop, A, Sa)
+
+    # Croisement
+    fitnessValue = evaluate(chromosomePopMutation, A, Sa)
+    bestPop = positionBest(fitnessValue, bestPopLength)
+    chromosomePopCrossing = crossing(popNumber, chromosomePopMutation, A, Sa, percentPopCrossing,
+                                     lowPercentCutNumber, highPercentCutNumber, bestPop)
+
+    chromosomeFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop)
+    fitnessValue = evaluate(chromosomePopCrossing, A, Sa)
+
+    return chromosomeFinal, fitnessValue, A, Sa
 
 #Permet d'effectuer l'algorithme génétique avec les opérations à effectuer dans l'ordre
 def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopulationCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength):

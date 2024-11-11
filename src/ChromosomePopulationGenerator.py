@@ -21,5 +21,4 @@ def ChromosomePopulationGeneration(PathA, populationNumber):
     for i in range(populationNumber):       #créé des chromosomes en fonction de la taille de A
         chromosome = [random.randint(0, 1) for j in range(len(A))]
         chromosomePopulation.append(chromosome)
-    print(type(chromosomePopulation))
     return chromosomePopulation, A, Sa
