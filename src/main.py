@@ -7,16 +7,16 @@ from src.traitement import traitement, solutionList
 
 
 def main():
-    path = "C:/Users/antoi/PycharmProjects/SubsetSumProb-GA/data/xlarge/ssp_xlarge_1_pbm.txt"
+    path = "/home/quentin/PycharmProjects/SubsetSumProb-GA/data/xlarge/ssp_xlarge_1_pbm.txt"
 
     # Training Settings
     POPULATION_NUMBER = 30000
-    PERCENT_POP_MUTATED = 0.2
+    PERCENT_POP_MUTATED = 0.4
     LOW_PERCENT_GENES_MUTATED = 0.1
     HIGH_PERCENT_GENES_MUTATED = 0.3
-    PERCENT_POP_CROSSING = 0.6
-    LOW_PERCENT_CUT_NUMBER = 0.1
-    HIGH_PERCENT_CUT_NUMBER = 0.25
+    PERCENT_POP_CROSSING = 0.8
+    LOW_PERCENT_CUT_NUMBER = 0.02
+    HIGH_PERCENT_CUT_NUMBER = 0.8
     BEST_POP_LENGTH = 10
 
     # Generation de la premiere population
@@ -24,7 +24,9 @@ def main():
 
     #First treatment
     # Mutations
-    chromosomePopMutation = mutation(chromosomePop, POPULATION_NUMBER, PERCENT_POP_MUTATED, LOW_PERCENT_GENES_MUTATED, HIGH_PERCENT_GENES_MUTATED)
+    fitnessValue = evaluate(chromosomePop, A, Sa)
+    bestPop = positionBest(fitnessValue, BEST_POP_LENGTH)
+    chromosomePopMutation = mutation(chromosomePop, POPULATION_NUMBER, PERCENT_POP_MUTATED, LOW_PERCENT_GENES_MUTATED, HIGH_PERCENT_GENES_MUTATED, bestPop)
 
     # Croisement
     fitnessValue = evaluate(chromosomePopMutation, A, Sa)
@@ -37,6 +39,7 @@ def main():
     # #Boucle jusqu'à temps que résolu
     while min(fitnessValue.values()) > 0:
         chromosomeFinal, fitnessValue = traitement(chromosomeFinal, A, Sa, POPULATION_NUMBER,PERCENT_POP_MUTATED, LOW_PERCENT_GENES_MUTATED, HIGH_PERCENT_GENES_MUTATED, PERCENT_POP_CROSSING, LOW_PERCENT_CUT_NUMBER, HIGH_PERCENT_CUT_NUMBER, BEST_POP_LENGTH)
+
 
     listOfSolution = solutionList(chromosomeFinal, fitnessValue)
     print(listOfSolution)
