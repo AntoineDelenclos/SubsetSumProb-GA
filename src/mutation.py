@@ -39,3 +39,22 @@ def mutation(chromosomePop, popNumber, percentPopMutated, lowPercentGenesMutated
             newChromosomePop[positionPop] = mutatedChromosome  # Keep the mutation if it's better
 
     return newChromosomePop
+
+
+def relaxMutation(chromosomePop, popNumber, percentPopMutated, percentGenesMutated):
+    populationMutationNumber = int(percentPopMutated * popNumber)  # Fewer individuals mutated
+    newChromosomePop = chromosomePop.copy()
+
+    for _ in range(populationMutationNumber):
+        positionPop = random.randint(0, popNumber - 1)  # Select a random chromosome to mutate
+        chromosome = newChromosomePop[positionPop]
+
+        # Determine the number of genes to mutate in this chromosome
+        geneNumberTransformed = int(percentGenesMutated * len(chromosome))
+        specificTransformedGenes = [random.randint(0, len(chromosome) - 1) for _ in range(geneNumberTransformed)]
+
+        # Apply mutation without fitness check
+        for geneIndex in specificTransformedGenes:
+            chromosome[geneIndex] = (chromosome[geneIndex] + 1) % 2  # Flip gene between 0 and 1
+
+    return newChromosomePop

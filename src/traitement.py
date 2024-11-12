@@ -1,9 +1,9 @@
 from src.ChromosomePopulationGenerator import ChromosomePopulationGeneration
-from src.crossing import crossing
+from src.crossing import *
 from src.fitnessFunction import evaluate
-from src.mutation import mutation
+from src.mutation import *
 from src.positions import positionBest, positionWorst
-from src.strategies import betterOrNot, strategyWorst
+from src.strategies import *
 
 
 #This return the final chromosome population after the first treatment and the fitness values associated, and also the set and the targeted value
@@ -44,6 +44,30 @@ def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGen
     chromosomePopFinal = strategyWorst(chromosomePopPreFinal, A, bestPop, worstPop, newFullyRandomBestLength, lowPercentGenesMutated, highPercentGenesMutated) #Replace worsts by new ones
 
     return chromosomePopFinal, fitnessValue
+
+
+def traitementRelax(chromosomePop, A, Sa, popNumber, percentPopMutated, percentGenesMutated,
+                    percentPopulationCrossing, percentCutNumber, bestPopLength,
+                    newFullyRandomBestLength, worstPopLength, penalty):
+    # Evaluation
+    fitnessValue = evaluate(chromosomePop, A, Sa, penalty)
+    bestPop = positionBest(fitnessValue, bestPopLength)
+    worstPop = positionWorst(fitnessValue, worstPopLength)
+
+    # Mutations
+    chromosomePopMut = relaxMutation(chromosomePop, popNumber, percentPopMutated, percentGenesMutated)
+
+    # Crossings
+    chromosomePopCrossing = relaxCrossing(popNumber, chromosomePopMut, percentPopulationCrossing, percentCutNumber)
+
+    # Select better chromosomes
+    chromosomePopPreFinal = betterOrNot(chromosomePop, chromosomePopCrossing, A, Sa, bestPop, penalty)
+
+    # Replace worst chromosomes
+    chromosomePopFinal = strategyWorstRelax(chromosomePopPreFinal, A, bestPop, worstPop, newFullyRandomBestLength, percentGenesMutated)
+
+    return chromosomePopFinal, fitnessValue
+
 
 #Permet d'afficher la liste des solutions trouvées
 def solutionList(chromosomePop, fitnessValue):
