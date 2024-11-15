@@ -3,9 +3,9 @@ from multiprocessing import Pool
 from src.traitement import *
 
 
-def findSolutions(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty):
+def findSolutions(pathFile, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty):
     # First population generation and treatment
-    chromosomeFinal, fitnessValue, A, Sa = firstTreatment(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty)
+    chromosomeFinal, fitnessValue, A, Sa = firstTreatment(pathFile, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty)
 
     min_value = min(fitnessValue.values())
     # Search of solution
@@ -20,12 +20,12 @@ def findSolutions(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated
     return listOfSolution
 
 #This will find solutions for each file (we will use multiprocessing to speed up the process)
-def folderSolutions(directory_path, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty, cpuCores):
+def folderSolutions(directory_path, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty, cpuCores):
     txtFiles = [os.path.join(directory_path, f) for f in os.listdir(directory_path) if f.endswith('.txt')] #list of all the .txt contained inside our folder
     filesSolutions = {}
     numberFiles = len(txtFiles) # We will use that to know
     print(f"Le dossier {os.path.basename(directory_path)} contient {numberFiles} fichiers.")
-    poolTasks = [(file, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty) for file in txtFiles]
+    poolTasks = [(file, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty) for file in txtFiles]
 
     with Pool(cpuCores) as pool: #This will allow for multiprocessing with all the available cores on our machine
         testPool = pool.starmap(findSolutions, poolTasks)

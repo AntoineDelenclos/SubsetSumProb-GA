@@ -7,9 +7,9 @@ from src.strategies import *
 
 
 #This return the final chromosome population after the first treatment and the fitness values associated, and also the set and the targeted value
-def firstTreatment(pathFile, popNumber, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty):
+def firstTreatment(pathFile, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty):
     # Generation de la premiere population
-    chromosomePop, A, Sa = ChromosomePopulationGeneration(pathFile, popNumber)
+    chromosomePop, A, Sa = ChromosomePopulationGeneration(pathFile, popNumber, popValueIs1Percent)
 
     # Mutations
     fitnessValue = evaluate(chromosomePop, A, Sa, penalty)
