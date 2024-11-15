@@ -47,12 +47,10 @@ def traitement(chromosomePop, A, Sa, popNumber, percentPopMutated, lowPercentGen
 
 #Permet d'afficher la liste des solutions trouvées
 def solutionList(chromosomePop, fitnessValue):
-    listOfSolutionIndexes = []
-    for i in range(len(fitnessValue)):  #on itère sur tous les fitness value pour trouver les solutions
-        if fitnessValue[i] == 0:
-            listOfSolutionIndexes.append(i)
+    # Finding all indexes of solutions with a fitness egal to 0
+    listOfSolutionIndexes = [i for i, fitness in fitnessValue.items() if fitness == 0]
     listOfSolution = {}
-    for i in range(len(listOfSolutionIndexes)):    #on récupère la valeur des solutions
+    for i in range(len(listOfSolutionIndexes)):    #we find the chromosome corresponding to the solution
         solution = chromosomePop[i]
         if solution not in listOfSolution.values():
             listOfSolution.update({listOfSolutionIndexes[i]: solution})

@@ -62,31 +62,3 @@ def crossing(POPULATION_NUMBER, chromosomePop, A, Sa, percentPopulationCrossing,
 
         countCroisements += 1
     return newChromosomePop
-
-
-def relaxCrossing(POPULATION_NUMBER, chromosomePop, percentPopulationCrossing, percentCutNumber):
-    newChromosomePop = list(chromosomePop)
-    populationCrossingNumber = int(percentPopulationCrossing * POPULATION_NUMBER)  # Fewer crossovers applied
-    countCrossings = 0
-
-    while countCrossings < populationCrossingNumber:
-        # Select two random chromosomes to cross
-        positionPopOne = random.randint(0, POPULATION_NUMBER - 1)
-        positionPopTwo = random.randint(0, POPULATION_NUMBER - 1)
-
-        # Get the chromosomes to cross
-        chromosomeOne = chromosomePop[positionPopOne]
-        chromosomeTwo = chromosomePop[positionPopTwo]
-
-        # Set a single crossover cut based on a percentage of the chromosome length
-        crossoverPoint = int(percentCutNumber * len(chromosomeOne))
-
-        # Create new chromosome by mixing parts of the selected chromosomes
-        newChromosome = chromosomeOne[:crossoverPoint] + chromosomeTwo[crossoverPoint:]
-
-        # Replace one of the chromosomes in the new population
-        newChromosomePop[positionPopOne] = newChromosome
-
-        countCrossings += 1
-
-    return newChromosomePop

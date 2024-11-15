@@ -1,13 +1,9 @@
 #This will allow to select a number of our best chromosomes from the population that we want to keep
 def positionBest(fitnessValue, bestPopLength):
-    # Trier les chromosomes par fitness croissante (meilleure fitness en premier)
-    sortedFitness = [i for i, _ in sorted(fitnessValue.items(), key=lambda item: item[1])]
-    bestIndexes = sortedFitness[:bestPopLength]
-    #print(f"BEST : {fitnessValue[bestIndexes[0]]}")
-    return bestIndexes
+    # Trier par fitness croissante et récupérer les `bestPopLength` premiers indices
+    return sorted(fitnessValue, key=fitnessValue.get)[:bestPopLength]
 
 #This will retrieve the worst chromosomes in our population
 def positionWorst(fitnessValue, worstPopLength):
-    sortedFitness = [i for i, _ in sorted(fitnessValue.items(), key=lambda item: item[1], reverse=True)]
-    worstIndexes = sortedFitness[:worstPopLength]
-    return worstIndexes
+    # Trier par fitness décroissante et récupérer les `worstPopLength` premiers indices
+    return sorted(fitnessValue, key=fitnessValue.get, reverse=True)[:worstPopLength]

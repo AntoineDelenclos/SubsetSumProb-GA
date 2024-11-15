@@ -3,37 +3,38 @@ from src.fitnessFunction import calculate_fitness
 
 
 def betterOrNot(chromosomePopBeforeCrossing, chromosomePopAfterCrossing, A, Sa, bestPop, penalty):
-    # Parcourir chaque index des meilleurs chromosomes
+    # Parcourir chaque index des meilleurs chromosomes et remplacement si plus intéressant ou non
     for idx in bestPop:
-        fitness_before = calculate_fitness(chromosomePopBeforeCrossing[idx], A, Sa, penalty)
-        fitness_after = calculate_fitness(chromosomePopAfterCrossing[idx], A, Sa, penalty)
-
-        # Remplacement si le score de fitness s'améliore ou reste constant
-        if fitness_before <= fitness_after:
+        if calculate_fitness(chromosomePopBeforeCrossing[idx], A, Sa, penalty) <= calculate_fitness(
+                chromosomePopAfterCrossing[idx], A, Sa, penalty):
             chromosomePopAfterCrossing[idx] = chromosomePopBeforeCrossing[idx]
     return chromosomePopAfterCrossing
 
 
 def strategyWorst(chromosomePopPreFinal, A, bestPop, worstPop, newFullyRandomBestLength, lowPercentGenesMutated, highPercentGenesMutated):
     chromosomePopFinal = chromosomePopPreFinal.copy()
-    replacementChromosomePop = []
+    #generate new random chromosomes
+    replacementChromosomePop = [
+        [random.randint(0, 1) for _ in range(len(A))]
+        for _ in range(newFullyRandomBestLength)
+    ]
 
-    for i in range(newFullyRandomBestLength): #generate new chromosomes
-        chromosome = [random.randint(0, 1) for j in range(len(A))]
-        replacementChromosomePop.append(chromosome)
-
-    for i in range(len(bestPop)): #do the mutation of the best chromosomes
-        chromosome = chromosomePopPreFinal[bestPop[i]].copy()
-        geneNumberTransformed = random.randint(int(lowPercentGenesMutated * len(chromosome)), int(highPercentGenesMutated * len(chromosome)))  # Between X and Y % of genes mutated
-        specificTransformedGenes = [random.randint(0, len(chromosome) - 1) for i in range(geneNumberTransformed)]  # Select genes to mutate
+    for idx in bestPop:
+        chromosome = chromosomePopPreFinal[idx].copy()
+        # Compute the number of genes to mutate
+        geneNumberTransformed = random.randint(
+            int(lowPercentGenesMutated * len(chromosome)),
+            int(highPercentGenesMutated * len(chromosome))
+        )
+        # Random selection of mutation indexes
+        specificTransformedGenes = random.sample(range(len(chromosome)), geneNumberTransformed)
+        # Mutation of selectionned genes
         for geneIndex in specificTransformedGenes:
-            chromosome[geneIndex] = (chromosome[geneIndex] + 1) % 2  # Flip the gene value between 0 and 1
-
+            chromosome[geneIndex] = 1 - chromosome[geneIndex]  # Bascule entre 0 et 1
         replacementChromosomePop.append(chromosome)
 
-    count = 0
-    for idx in worstPop: #replace the worsts by new chromosomes
+        # Remplacement worst chromosomes
+    for count, idx in enumerate(worstPop):
         chromosomePopFinal[idx] = replacementChromosomePop[count]
-        count += 1
 
     return chromosomePopFinal

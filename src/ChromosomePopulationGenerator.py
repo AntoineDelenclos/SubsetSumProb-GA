@@ -2,27 +2,25 @@ import random
 
 #Permet de générer une population, initialise une population en fonction du nombre d'éléments dans le fichier
 def ChromosomePopulationGeneration(PathA, populationNumber, popValueIs1Percent):
-    global chromosomePopulation, Sa
-    f = open(PathA, "r")
-    A = []
-    chromosomePopulation = []
+    # Lire le fichier et récupérer les valeurs de A et Sa
+    with open(PathA, "r") as f:
+        A = []
+        Sa = None
+
+        for line in f:
+            if line.startswith("A"):  # Ligne contenant A -> début des valeurs
+                A += [int(ch) for ch in line.split() if ch.isnumeric()]
+            else:  # Ligne contenant Sa -> valeur à atteindre
+                Sa = next(int(ch) for ch in line.split() if ch.isnumeric())
+
+    # Générer les chromosomes
     popValueIs0Percent = 1 - popValueIs1Percent
-    for line in f:       #récupère les valeurs de A dans le fichier donné en paramètre
-        if line[0] == "A":
-            lineCharacters = line.split(" ")
-            for ch in lineCharacters:
-                if ch.isnumeric():
-                    A.append(int(ch))
-        else :           #récupère la valeur de sum(A)
-            lineCharacters = line.split(" ")
-            lineCharacters[2] = lineCharacters[2].replace("\n", "")
-            for ch in lineCharacters:
-                if ch.isnumeric():
-                    Sa = int(ch)
-    for i in range(populationNumber):       #créé des chromosomes en fonction de la taille de A
-        if (popValueIs1Percent == 2):
-            chromosome = [random.randint(0, 1) for j in range(len(A))]
-        else:
-            chromosome = [random.choices([0,1],[popValueIs0Percent, popValueIs1Percent])[0] for j in range(len(A))]
-        chromosomePopulation.append(chromosome)
+    chromosomePopulation = [
+        [
+            random.randint(0, 1) if popValueIs1Percent == 2
+            else random.choices([0, 1], [popValueIs0Percent, popValueIs1Percent])[0]
+            for _ in range(len(A))
+        ]
+        for _ in range(populationNumber)
+    ]
     return chromosomePopulation, A, Sa
