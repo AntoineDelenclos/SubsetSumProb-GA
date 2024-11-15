@@ -37,26 +37,3 @@ def strategyWorst(chromosomePopPreFinal, A, bestPop, worstPop, newFullyRandomBes
         count += 1
 
     return chromosomePopFinal
-
-
-def strategyWorstRelax(chromosomePop, A, bestPop, worstPop, newFullyRandomBestLength, percentGenesMutated):
-    import random
-    newChromosomePop = chromosomePop.copy()
-    chromosomeLength = len(chromosomePop[0])
-
-    # Replace a portion of the worst chromosomes with new random chromosomes
-    for position in worstPop[:newFullyRandomBestLength]:
-        newChromosomePop[position] = [random.randint(0, 1) for _ in range(chromosomeLength)]
-
-    # Apply mutations to the remaining worst chromosomes
-    for position in worstPop[newFullyRandomBestLength:]:
-        chromosome = newChromosomePop[position]
-        geneNumberTransformed = int(percentGenesMutated * chromosomeLength)
-        specificTransformedGenes = [random.randint(0, chromosomeLength - 1) for _ in range(geneNumberTransformed)]
-
-        for geneIndex in specificTransformedGenes:
-            chromosome[geneIndex] = (chromosome[geneIndex] + 1) % 2  # Flip gene
-
-        newChromosomePop[position] = chromosome
-
-    return newChromosomePop
