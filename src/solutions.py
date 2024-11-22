@@ -10,6 +10,7 @@ def findSolutions(pathFile, popNumber, popValueIs1Percent, percentPopMutated, lo
         lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing,
         lowPercentCutNumber, highPercentCutNumber, bestPopLength, penalty
     )
+    numberTreatment = 1
     # Search of solution
     while (min_value := min(fitnessValue.values())) != 0:
         chromosomeFinal, fitnessValue = traitement(
@@ -18,8 +19,11 @@ def findSolutions(pathFile, popNumber, popValueIs1Percent, percentPopMutated, lo
             lowPercentCutNumber, highPercentCutNumber, bestPopLength,
             newFullyRandomBestLength, worstPopLength, penalty
         )
+        numberTreatment += 1
 
-    return solutionList(chromosomeFinal, fitnessValue)
+    #print(f"Nombre de treatment: {numberTreatment}")
+
+    return solutionList(chromosomeFinal, fitnessValue), numberTreatment
 
 #This will find solutions for each file (we will use multiprocessing to speed up the process)
 def folderSolutions(directory_path, popNumber, popValueIs1Percent, percentPopMutated, lowPercentGenesMutated, highPercentGenesMutated, percentPopCrossing, lowPercentCutNumber, highPercentCutNumber, bestPopLength, newFullyRandomBestLength, worstPopLength, penalty, cpuCores):
@@ -34,11 +38,19 @@ def folderSolutions(directory_path, popNumber, popValueIs1Percent, percentPopMut
     ]
     # Execution in parallel
     with Pool(cpuCores) as pool:
-        results = pool.starmap(findSolutions, poolTasks)
+        exec = pool.starmap(findSolutions, poolTasks)
+        results = [exec[i][0] for i in range(len(exec))]
+        numberTreatmentsList = [exec[i][1] for i in range(len(exec))]
+
     # Associate solutions with file names
     filesSolutions = {
         os.path.basename(path): result
         for path, result in zip(txtFiles, results)
     }
+    numberTreatments = {
+        os.path.basename(txtFiles[i]): numberTreatmentsList[i]
+        for i in range(len(txtFiles))
+    }
 
-    return filesSolutions
+
+    return filesSolutions, numberTreatments
